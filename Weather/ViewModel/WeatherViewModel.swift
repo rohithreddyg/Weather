@@ -120,17 +120,17 @@ class WeatherViewModel {
     }
     
     // MARK: - Helper Functions
-    private func tempStringFor(temp: Double) -> String {
+    func tempStringFor(temp: Double) -> String {
         return "\(Int(temp.rounded()))ºF"
     }
     
-    private func pressureInHgFrom(pressure: Int) -> String {
+    func pressureInHgFrom(pressure: Int) -> String {
         let preInHg: Double = Double(pressure) * 0.029529983071445
         let string = String(format: "%.2f inHg", preInHg)
         return string
     }
     
-    private func getHourStringFrom(date: Date, timezone: Int? = nil) -> String {
+    func getHourStringFrom(date: Date, timezone: Int? = nil) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .short
@@ -144,7 +144,7 @@ class WeatherViewModel {
         return string
     }
     
-    private func getDateTimeFrom(date: Date, timezone: Int? = nil) -> String {
+    func getDateTimeFrom(date: Date, timezone: Int? = nil) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
         dateFormatter.dateStyle = .medium
@@ -155,7 +155,7 @@ class WeatherViewModel {
         return string
     }
     
-    private func calculateGMT(time: Int) -> String {
+    func calculateGMT(time: Int) -> String {
         let timezone = abs(time) / 3600
         let compare = time > 0 ? "+" : "-"
         if timezone < 10 {
