@@ -16,6 +16,7 @@ class WeatherService {
     static let shared = WeatherService()
     
     let baseUrl = "https://api.openweathermap.org/data/2.5/weather?"
+    /// If provided more time, I would want to secure this api key instead of just adding it as a constant in this file.
     let apiKey = "6aeb43ef4d51a6a4d3195cd4c39491d8"
     let session = URLSession(configuration: .default)
     

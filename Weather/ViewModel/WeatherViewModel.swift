@@ -61,6 +61,7 @@ class WeatherViewModel {
         }
     }
     
+    /// Converts WeatherResult struct into WeatherViewModel
     private func feedWeatherData() {
         guard let cityWeather = weatherResult else {
             return
@@ -120,10 +121,12 @@ class WeatherViewModel {
     }
     
     // MARK: - Helper Functions
+    /// Exposing these functions just for testing.
     func tempStringFor(temp: Double) -> String {
         return "\(Int(temp.rounded()))ºF"
     }
     
+    /// Converts Pressure from Hpa(hectopascal) to inHg(inches of Mercury)
     func pressureInHgFrom(pressure: Int) -> String {
         let preInHg: Double = Double(pressure) * 0.029529983071445
         let string = String(format: "%.2f inHg", preInHg)
