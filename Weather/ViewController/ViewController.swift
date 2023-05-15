@@ -10,6 +10,7 @@ import CoreLocation
 
 class ViewController: UIViewController {
 
+    // MARK: - IBOutlets
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -32,9 +33,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var windSpeedLabel: UILabel!
     @IBOutlet weak var visibilityLabel: UILabel!
     
+    // MARK: - Properties
     var weatherViewModel: WeatherViewModel?
     var locationService: LocationService?
     
+    // MARK: - View Lyfe Cycle Method(s)
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,11 +49,12 @@ class ViewController: UIViewController {
         configureView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        view.applyGradientLayer()
+    // MARK: - Private functions
+    private func startLocationService() {
+        locationService?.delegate = self
+        locationService?.requestLocation()
     }
-    
+        
     private func configureView() {
         guard let weatherViewModel = weatherViewModel else {
             showAlert(message: "")
@@ -75,7 +79,7 @@ class ViewController: UIViewController {
         }
         if let temp = weatherViewModel.temperature {
             temperatureLabel.isHidden = false
-            temperatureLabel.text = weatherViewModel.tempStringFor(temp: temp)
+            temperatureLabel.text = temp
         } else {
             temperatureLabel.isHidden = true
         }
@@ -89,52 +93,52 @@ class ViewController: UIViewController {
            let low = weatherViewModel.lowTemp {
             highTempLabel.isHidden = false
             lowTempLabel.isHidden = false
-            highTempLabel.text = "H: \(weatherViewModel.tempStringFor(temp: high))"
-            lowTempLabel.text = "L: \(weatherViewModel.tempStringFor(temp: low))"
+            highTempLabel.text = high
+            lowTempLabel.text = low
         } else {
             highTempLabel.isHidden = true
             lowTempLabel.isHidden = true
         }
         if let dt = weatherViewModel.date {
             dateLabel.isHidden = false
-            dateLabel.text = weatherViewModel.getDateTimeFrom(date: dt, timezone: timezone)
+            dateLabel.text = dt
         } else {
             dateLabel.isHidden = true
         }
         
         if let humidity = weatherViewModel.humidity {
             humidityStackView.isHidden = false
-            humidityLabel.text = "\(humidity)%"
+            humidityLabel.text = humidity
         } else {
             humidityStackView.isHidden = true
         }
         if let feelsLike = weatherViewModel.feelsLike {
             feelsLikeStackView.isHidden = false
-            feelsLikeLabel.text = weatherViewModel.tempStringFor(temp: feelsLike)
+            feelsLikeLabel.text = feelsLike
         } else {
             feelsLikeStackView.isHidden = true
         }
         if let pressure = weatherViewModel.pressure {
             pressureStackView.isHidden = false
-            pressureLabel.text = weatherViewModel.pressureInHgFrom(pressure: pressure)
+            pressureLabel.text = pressure
         } else {
             pressureStackView.isHidden = true
         }
         if let sunset = weatherViewModel.sunset {
             sunsetStackView.isHidden = false
-            sunsetLabel.text = weatherViewModel.getHourStringFrom(date: sunset, timezone: timezone)
+            sunsetLabel.text = sunset
         } else {
             sunsetStackView.isHidden = true
         }
         if let windSpeed = weatherViewModel.windSpeed {
             windSpeedStackView.isHidden = false
-            windSpeedLabel.text = "\(windSpeed) mph"
+            windSpeedLabel.text = windSpeed
         } else {
             windSpeedStackView.isHidden = true
         }
         if let visibility = weatherViewModel.visibility {
             visibilityStackView.isHidden = false
-            visibilityLabel.text = "\(visibility) mi"
+            visibilityLabel.text = visibility
         } else {
             visibilityStackView.isHidden = true
         }
@@ -149,17 +153,13 @@ class ViewController: UIViewController {
         weatherViewModel?.error = nil
         self.present(alert, animated: true)
     }
-    
-    func startLocationService() {
-        locationService?.delegate = self
-        locationService?.requestLocation()
-    }
 }
 
 extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        if let text = textField.text {
+        if let text = textField.text,
+           !text.isEmpty {
             weatherViewModel?.fetchWeather(text: text, location: nil)
             configureView()
         }

@@ -17,6 +17,7 @@ class LocationService: NSObject {
     var delegate: LocationServiceDelegate?
     var locationManager = CLLocationManager()
     
+    // MARK: - init
     override init() {
         super.init()
         locationManager.delegate = self

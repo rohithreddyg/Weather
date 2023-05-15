@@ -37,8 +37,6 @@ class WeatherService {
             return
         }
         
-        print("Service Request: \(url)")
-        
         let task = session.dataTask(with: url) { data, response, error in
                 if let _ = error {
                     completion(nil, WeatherError.networkFailed)
@@ -46,22 +44,15 @@ class WeatherService {
                 }
                 
                 guard let data = data,
-                      let response = response as? HTTPURLResponse else {
+                      let _ = response as? HTTPURLResponse else {
                     completion(nil, WeatherError.jsonSerializationFailed)
                     return
                 }
                 
-                print("Service Data: \(String(describing: String(data: data, encoding: String.Encoding.utf8))) \nResponse: \(response)")
-                
-                do {
-                    if response.statusCode == 200 {
-                        let items = try JSONDecoder().decode(WeatherResult.self, from: data)
-                        print("Response: \(items)")
-                        completion(items, nil)
-                    } else {
-                        completion(nil, WeatherError.jsonParsingFailed)
-                    }
-                } catch {
+            do {
+                let items = try JSONDecoder().decode(WeatherResult.self, from: data)
+                completion(items, nil)
+            } catch {
                     completion(nil, WeatherError.jsonParsingFailed)
                 }
         }
@@ -84,13 +75,11 @@ class WeatherService {
                 }
                 
                 guard let imageData = data,
-                      let response = response as? HTTPURLResponse else {
+                      let _ = response as? HTTPURLResponse else {
                     completion(nil, WeatherError.jsonSerializationFailed)
                     return
                 }
                 
-                print("Service Data: \(String(describing: String(data: imageData, encoding: String.Encoding.utf8))) \nResponse: \(response)")
-
                 if let downloadedImage = UIImage(data: imageData) {
                     completion(downloadedImage, nil)
                 } else {

@@ -14,27 +14,31 @@ protocol WeatherViewModelDelegate {
     func weatherDidReceiveError(error: WeatherError)
 }
 
+let keyLastSavedWeather = "lastSavedWeather"
+
 class WeatherViewModel {
+    // MARK: - Properties
     var city: String?
     var country: String?
     var weatherImage: UIImage?
-    var temperature: Double?
+    var temperature: String?
     var weatherDescription: String?
-    var highTemp: Double?
-    var lowTemp: Double?
-    var date: Date?
-    var humidity: Int?
-    var feelsLike: Double?
-    var pressure: Int?
-    var windSpeed: Double?
-    var sunset: Date?
+    var highTemp: String?
+    var lowTemp: String?
+    var date: String?
+    var humidity: String?
+    var feelsLike: String?
+    var pressure: String?
+    var windSpeed: String?
+    var sunset: String?
     var timezone: Int?
-    var visibility: Int?
+    var visibility: String?
     
     var weatherResult: WeatherResult?
     var error: WeatherError?
     var delegate: WeatherViewModelDelegate?
     
+    // MARK: - Retrieve Weather Info
     func fetchWeather(text: String?, location: CLLocation?) {
         WeatherService.shared.getWeather(city: text, location: location) { [weak self] weatherResult, error in
             DispatchQueue.main.async {
@@ -62,19 +66,21 @@ class WeatherViewModel {
             return
         }
         city = cityWeather.name + ", " + cityWeather.sys.country
-        temperature = cityWeather.main.temp
+        temperature = tempStringFor(temp: cityWeather.main.temp)
         weatherDescription = cityWeather.weather.first?.description.capitalized
-        highTemp = cityWeather.main.temp_max
-        lowTemp = cityWeather.main.temp_min
-        date = Date(timeIntervalSince1970: Double(cityWeather.dt))
-        humidity = cityWeather.main.humidity
-        feelsLike = cityWeather.main.feels_like
-        pressure = cityWeather.main.pressure
-        windSpeed = cityWeather.wind.speed
-        sunset = Date(timeIntervalSince1970: Double(cityWeather.sys.sunset))
+        highTemp = "H: \(tempStringFor(temp: cityWeather.main.temp_max))"
+        lowTemp = "L: \(tempStringFor(temp: cityWeather.main.temp_min))"
         timezone = cityWeather.timezone
+        let dt = Date(timeIntervalSince1970: Double(cityWeather.dt))
+        date = getDateTimeFrom(date: dt, timezone: timezone)
+        humidity = "\(cityWeather.main.humidity)%"
+        feelsLike = tempStringFor(temp: cityWeather.main.feels_like)
+        pressure = pressureInHgFrom(pressure: cityWeather.main.pressure)
+        windSpeed = "\(cityWeather.wind.speed) mph"
+        let sunsetTime = Date(timeIntervalSince1970: Double(cityWeather.sys.sunset))
+        sunset = getHourStringFrom(date: sunsetTime, timezone: timezone)
         let visibilityMiles: CGFloat = CGFloat(cityWeather.visibility) / 1609.34
-        visibility = Int(visibilityMiles.rounded())
+        visibility = "\(Int(visibilityMiles.rounded())) mi"
 
         if let icon = cityWeather.weather.first?.icon {
             if let imageData = UserDefaults.standard.value(forKey: icon) {
@@ -95,9 +101,10 @@ class WeatherViewModel {
         
     }
     
+    // MARK: - Caching Functions
     private func cacheWeather(weather: Encodable) {
         do {
-            try UserDefaults.standard.setObject(weather, forKey: "weather")
+            try UserDefaults.standard.setObject(weather, forKey: keyLastSavedWeather)
         } catch {
             print(error.localizedDescription)
         }
@@ -105,24 +112,25 @@ class WeatherViewModel {
     
     func getWeatherFromCacheIfAvailable() {
         do {
-            weatherResult = try UserDefaults.standard.getObject(forKey: "weather", castTo: WeatherResult.self)
+            weatherResult = try UserDefaults.standard.getObject(forKey: keyLastSavedWeather, castTo: WeatherResult.self)
             feedWeatherData()
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    func tempStringFor(temp: Double) -> String {
+    // MARK: - Helper Functions
+    private func tempStringFor(temp: Double) -> String {
         return "\(Int(temp.rounded()))ºF"
     }
     
-    func pressureInHgFrom(pressure: Int) -> String {
+    private func pressureInHgFrom(pressure: Int) -> String {
         let preInHg: Double = Double(pressure) * 0.029529983071445
         let string = String(format: "%.2f inHg", preInHg)
         return string
     }
     
-    func getHourStringFrom(date: Date, timezone: Int? = nil) -> String {
+    private func getHourStringFrom(date: Date, timezone: Int? = nil) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .short
@@ -136,7 +144,7 @@ class WeatherViewModel {
         return string
     }
     
-    func getDateTimeFrom(date: Date, timezone: Int? = nil) -> String {
+    private func getDateTimeFrom(date: Date, timezone: Int? = nil) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
         dateFormatter.dateStyle = .medium

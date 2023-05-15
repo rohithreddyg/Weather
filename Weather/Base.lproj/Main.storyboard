@@ -21,9 +21,9 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="793"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search for a City" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AZe-KE-FeG">
-                                        <rect key="frame" x="32" y="32" width="329" height="34"/>
+                                        <rect key="frame" x="32" y="32" width="329" height="48"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="34" id="kof-kS-SVV"/>
+                                            <constraint firstAttribute="height" constant="48" id="kof-kS-SVV"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="webSearch" textContentType="address-level2"/>
@@ -31,8 +31,8 @@
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="jZn-tH-Utk"/>
                                         </connections>
                                     </textField>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="HKw-DZ-XTX" customClass="WeatherStackView" customModule="Weather" customModuleProvider="target">
-                                        <rect key="frame" x="32" y="100" width="329" height="300"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HKw-DZ-XTX" customClass="WeatherStackView" customModule="Weather" customModuleProvider="target">
+                                        <rect key="frame" x="32" y="114" width="329" height="300"/>
                                         <subviews>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VyI-vH-UIK">
                                                 <rect key="frame" x="0.0" y="0.0" width="329" height="0.0"/>
@@ -40,26 +40,19 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EkL-4t-lBI">
-                                                <rect key="frame" x="0.0" y="0.0" width="329" height="145"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="EkL-4t-lBI">
+                                                <rect key="frame" x="0.0" y="0.0" width="329" height="150"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="JMc-sb-p7Y">
-                                                        <rect key="frame" x="0.0" y="72.666666666666657" width="329" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="329" height="150"/>
                                                         <subviews>
                                                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wJZ-so-iWu">
-                                                                <rect key="frame" x="164.66666666666666" y="0.0" width="0.0" height="0.0"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" secondItem="wJZ-so-iWu" secondAttribute="height" multiplier="1:1" id="1P5-G1-aSN"/>
-                                                                    <constraint firstAttribute="width" secondItem="wJZ-so-iWu" secondAttribute="height" multiplier="1:1" id="l35-Z1-dR4"/>
-                                                                </constraints>
+                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="0.0"/>
                                                             </imageView>
                                                         </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="wJZ-so-iWu" firstAttribute="centerX" secondItem="JMc-sb-p7Y" secondAttribute="centerX" id="y7O-xt-gQL"/>
-                                                        </constraints>
                                                     </stackView>
-                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Llc-Ad-EFz">
-                                                        <rect key="frame" x="0.0" y="55.666666666666657" width="0.0" height="33.666666666666657"/>
+                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Llc-Ad-EFz">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="150"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -73,7 +66,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3dD-V2-X7H">
-                                                <rect key="frame" x="0.0" y="155" width="329" height="145"/>
+                                                <rect key="frame" x="0.0" y="150" width="329" height="150"/>
                                                 <subviews>
                                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rBd-71-eKu">
                                                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="20.333333333333332"/>
@@ -101,7 +94,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rk4-kt-u1h">
-                                        <rect key="frame" x="36" y="458" width="321" height="262"/>
+                                        <rect key="frame" x="36" y="472" width="321" height="262"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="noe-vw-rDa">
                                                 <rect key="frame" x="0.0" y="0.0" width="321" height="74"/>
