@@ -256,6 +256,7 @@
                         <outlet property="sunsetLabel" destination="IX0-Wm-T6L" id="stf-sx-BIk"/>
                         <outlet property="sunsetStackView" destination="PiI-lJ-Pxp" id="Vdg-dL-LQK"/>
                         <outlet property="temperatureLabel" destination="Llc-Ad-EFz" id="ybd-gK-rbA"/>
+                        <outlet property="temperatureStackView" destination="HKw-DZ-XTX" id="UJY-oi-gAC"/>
                         <outlet property="visibilityLabel" destination="w1k-4P-3nm" id="Vg6-Rr-zFG"/>
                         <outlet property="visibilityStackView" destination="rsl-O3-fmc" id="cRb-yc-SHp"/>
                         <outlet property="weatherImageView" destination="wJZ-so-iWu" id="ItE-Vx-Gis"/>

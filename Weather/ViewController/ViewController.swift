@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var lowTempLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     
+    @IBOutlet weak var temperatureStackView: WeatherStackView!
     @IBOutlet weak var humidityStackView: UIStackView!
     @IBOutlet weak var feelsLikeStackView: UIStackView!
     @IBOutlet weak var pressureStackView: UIStackView!
@@ -56,92 +57,86 @@ class ViewController: UIViewController {
     }
         
     private func configureView() {
+        toggleVisibility(of: temperatureStackView, for: weatherViewModel)
+
         guard let weatherViewModel = weatherViewModel else {
             showAlert(message: "")
             return
         }
+        
         if let error = weatherViewModel.error {
             print(error.errorDescription)
             showAlert(message: error.message)
             return
         }
+        
         if let city = weatherViewModel.city {
-            cityLabel.isHidden = false
             cityLabel.text = city
-        } else {
-            cityLabel.isHidden = true
         }
+        toggleVisibility(of: cityLabel, for: weatherViewModel.city)
+        
         if let image = weatherViewModel.weatherImage {
-            weatherImageView.isHidden = false
             weatherImageView.image = image
-        } else {
-            weatherImageView.isHidden = true
         }
+        toggleVisibility(of: weatherImageView, for: weatherViewModel.weatherImage)
+        
         if let temp = weatherViewModel.temperature {
-            temperatureLabel.isHidden = false
             temperatureLabel.text = temp
-        } else {
-            temperatureLabel.isHidden = true
         }
+        toggleVisibility(of: temperatureLabel, for: weatherViewModel.temperature)
+        
         if let desc = weatherViewModel.weatherDescription {
-            descriptionLabel.isHidden = false
             descriptionLabel.text = desc
-        } else {
-            descriptionLabel.isHidden = true
         }
+        toggleVisibility(of: descriptionLabel, for: weatherViewModel.weatherDescription)
+        
         if let high = weatherViewModel.highTemp,
            let low = weatherViewModel.lowTemp {
-            highTempLabel.isHidden = false
-            lowTempLabel.isHidden = false
             highTempLabel.text = high
             lowTempLabel.text = low
-        } else {
-            highTempLabel.isHidden = true
-            lowTempLabel.isHidden = true
         }
+        toggleVisibility(of: highTempLabel, for: weatherViewModel.highTemp)
+        toggleVisibility(of: lowTempLabel, for: weatherViewModel.lowTemp)
+        
         if let dt = weatherViewModel.date {
-            dateLabel.isHidden = false
             dateLabel.text = dt
-        } else {
-            dateLabel.isHidden = true
         }
+        toggleVisibility(of: dateLabel, for: weatherViewModel.date)
+        
         
         if let humidity = weatherViewModel.humidity {
-            humidityStackView.isHidden = false
             humidityLabel.text = humidity
-        } else {
-            humidityStackView.isHidden = true
         }
+        toggleVisibility(of: humidityStackView, for: weatherViewModel.humidity)
+        
         if let feelsLike = weatherViewModel.feelsLike {
-            feelsLikeStackView.isHidden = false
             feelsLikeLabel.text = feelsLike
-        } else {
-            feelsLikeStackView.isHidden = true
         }
+        toggleVisibility(of: feelsLikeStackView, for: weatherViewModel.feelsLike)
+        
         if let pressure = weatherViewModel.pressure {
-            pressureStackView.isHidden = false
             pressureLabel.text = pressure
-        } else {
-            pressureStackView.isHidden = true
         }
+        toggleVisibility(of: pressureStackView, for: weatherViewModel.pressure)
+        
         if let sunset = weatherViewModel.sunset {
-            sunsetStackView.isHidden = false
             sunsetLabel.text = sunset
-        } else {
-            sunsetStackView.isHidden = true
         }
+        toggleVisibility(of: sunsetStackView, for: weatherViewModel.sunset)
+        
         if let windSpeed = weatherViewModel.windSpeed {
-            windSpeedStackView.isHidden = false
             windSpeedLabel.text = windSpeed
-        } else {
-            windSpeedStackView.isHidden = true
         }
+        toggleVisibility(of: windSpeedStackView, for: weatherViewModel.windSpeed)
+        
         if let visibility = weatherViewModel.visibility {
-            visibilityStackView.isHidden = false
             visibilityLabel.text = visibility
-        } else {
-            visibilityStackView.isHidden = true
         }
+        toggleVisibility(of: visibilityStackView, for: weatherViewModel.visibility)
+    }
+    
+    private func toggleVisibility(of view: UIView, for value: Any?) {
+        view.isHidden = (value != nil) ? false : true
     }
     
     private func showAlert(message: String) {
