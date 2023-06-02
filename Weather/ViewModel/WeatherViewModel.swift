@@ -34,7 +34,6 @@ class WeatherViewModel {
     var pressure = ""
     var windSpeed = ""
     var sunset = ""
-    var timezone = 0
     var visibility = ""
     
     var error: WeatherError?
@@ -72,7 +71,7 @@ class WeatherViewModel {
         weatherDescription = (cityWeather.weather.first?.description.capitalized)!
         highTemp = "H: \(tempStringFor(temp: cityWeather.main.tempMax))"
         lowTemp = "L: \(tempStringFor(temp: cityWeather.main.tempMin))"
-        timezone = cityWeather.timezone
+        let timezone = cityWeather.timezone
         let dt = Date(timeIntervalSince1970: Double(cityWeather.dt))
         date = getDateTimeFrom(date: dt, timezone: timezone)
         humidity = "\(cityWeather.main.humidity)%"
