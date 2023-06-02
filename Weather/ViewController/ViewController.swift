@@ -57,8 +57,8 @@ class ViewController: UIViewController {
     }
         
     private func configureView() {
-        toggleVisibility(of: temperatureStackView, for: weatherViewModel)
-
+        toggleVisibility(of: temperatureStackView, for: weatherViewModel?.city ?? "")
+        
         guard let weatherViewModel = weatherViewModel else {
             showAlert(message: "")
             return
@@ -70,73 +70,51 @@ class ViewController: UIViewController {
             return
         }
         
-        if let city = weatherViewModel.city {
-            cityLabel.text = city
-        }
+        cityLabel.text = weatherViewModel.city
         toggleVisibility(of: cityLabel, for: weatherViewModel.city)
         
         if let image = weatherViewModel.weatherImage {
+            weatherImageView.isHidden = false
             weatherImageView.image = image
+        } else {
+            weatherImageView.isHidden = true
         }
-        toggleVisibility(of: weatherImageView, for: weatherViewModel.weatherImage)
         
-        if let temp = weatherViewModel.temperature {
-            temperatureLabel.text = temp
-        }
+        temperatureLabel.text = weatherViewModel.temperature
         toggleVisibility(of: temperatureLabel, for: weatherViewModel.temperature)
         
-        if let desc = weatherViewModel.weatherDescription {
-            descriptionLabel.text = desc
-        }
+        descriptionLabel.text = weatherViewModel.weatherDescription
         toggleVisibility(of: descriptionLabel, for: weatherViewModel.weatherDescription)
         
-        if let high = weatherViewModel.highTemp,
-           let low = weatherViewModel.lowTemp {
-            highTempLabel.text = high
-            lowTempLabel.text = low
-        }
+        highTempLabel.text = weatherViewModel.highTemp
+        lowTempLabel.text = weatherViewModel.lowTemp
         toggleVisibility(of: highTempLabel, for: weatherViewModel.highTemp)
         toggleVisibility(of: lowTempLabel, for: weatherViewModel.lowTemp)
         
-        if let dt = weatherViewModel.date {
-            dateLabel.text = dt
-        }
+        dateLabel.text = weatherViewModel.date
         toggleVisibility(of: dateLabel, for: weatherViewModel.date)
         
-        
-        if let humidity = weatherViewModel.humidity {
-            humidityLabel.text = humidity
-        }
+        humidityLabel.text = weatherViewModel.humidity
         toggleVisibility(of: humidityStackView, for: weatherViewModel.humidity)
         
-        if let feelsLike = weatherViewModel.feelsLike {
-            feelsLikeLabel.text = feelsLike
-        }
+        feelsLikeLabel.text = weatherViewModel.feelsLike
         toggleVisibility(of: feelsLikeStackView, for: weatherViewModel.feelsLike)
         
-        if let pressure = weatherViewModel.pressure {
-            pressureLabel.text = pressure
-        }
+        pressureLabel.text = weatherViewModel.pressure
         toggleVisibility(of: pressureStackView, for: weatherViewModel.pressure)
         
-        if let sunset = weatherViewModel.sunset {
-            sunsetLabel.text = sunset
-        }
+        sunsetLabel.text = weatherViewModel.sunset
         toggleVisibility(of: sunsetStackView, for: weatherViewModel.sunset)
         
-        if let windSpeed = weatherViewModel.windSpeed {
-            windSpeedLabel.text = windSpeed
-        }
+        windSpeedLabel.text = weatherViewModel.windSpeed
         toggleVisibility(of: windSpeedStackView, for: weatherViewModel.windSpeed)
         
-        if let visibility = weatherViewModel.visibility {
-            visibilityLabel.text = visibility
-        }
+        visibilityLabel.text = weatherViewModel.visibility
         toggleVisibility(of: visibilityStackView, for: weatherViewModel.visibility)
     }
     
-    private func toggleVisibility(of view: UIView, for value: Any?) {
-        view.isHidden = (value != nil) ? false : true
+    private func toggleVisibility(of view: UIView, for value: String) {
+        view.isHidden = !value.isEmpty ? false : true
     }
     
     private func showAlert(message: String) {

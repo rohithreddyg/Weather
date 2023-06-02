@@ -15,26 +15,28 @@ protocol WeatherViewModelDelegate {
 }
 
 let keyLastSavedWeather = "lastSavedWeather"
+let mtsToMiles = 1609.34
+let milesPerHourString = "mph"
+let mileString = "mi"
 
 class WeatherViewModel {
     // MARK: - Properties
-    var city: String?
-    var country: String?
+    var city = ""
+    var country = ""
     var weatherImage: UIImage?
-    var temperature: String?
-    var weatherDescription: String?
-    var highTemp: String?
-    var lowTemp: String?
-    var date: String?
-    var humidity: String?
-    var feelsLike: String?
-    var pressure: String?
-    var windSpeed: String?
-    var sunset: String?
-    var timezone: Int?
-    var visibility: String?
+    var temperature = ""
+    var weatherDescription = ""
+    var highTemp = ""
+    var lowTemp = ""
+    var date = ""
+    var humidity = ""
+    var feelsLike = ""
+    var pressure = ""
+    var windSpeed = ""
+    var sunset = ""
+    var timezone = 0
+    var visibility = ""
     
-    var weatherResult: WeatherResult?
     var error: WeatherError?
     var delegate: WeatherViewModelDelegate?
     
@@ -54,34 +56,33 @@ class WeatherViewModel {
                     return
                 }
                 
-                self.weatherResult = cityWeather
                 self.cacheWeather(weather: cityWeather)
-                self.feedWeatherData()
+                self.feedWeatherData(weatherResult: cityWeather)
             }
         }
     }
     
     /// Converts WeatherResult struct into WeatherViewModel
-    private func feedWeatherData() {
+    private func feedWeatherData(weatherResult: WeatherResult?) {
         guard let cityWeather = weatherResult else {
             return
         }
         city = cityWeather.name + ", " + cityWeather.sys.country
         temperature = tempStringFor(temp: cityWeather.main.temp)
-        weatherDescription = cityWeather.weather.first?.description.capitalized
-        highTemp = "H: \(tempStringFor(temp: cityWeather.main.temp_max))"
-        lowTemp = "L: \(tempStringFor(temp: cityWeather.main.temp_min))"
+        weatherDescription = (cityWeather.weather.first?.description.capitalized)!
+        highTemp = "H: \(tempStringFor(temp: cityWeather.main.tempMax))"
+        lowTemp = "L: \(tempStringFor(temp: cityWeather.main.tempMin))"
         timezone = cityWeather.timezone
         let dt = Date(timeIntervalSince1970: Double(cityWeather.dt))
         date = getDateTimeFrom(date: dt, timezone: timezone)
         humidity = "\(cityWeather.main.humidity)%"
-        feelsLike = tempStringFor(temp: cityWeather.main.feels_like)
+        feelsLike = tempStringFor(temp: cityWeather.main.feelsLike)
         pressure = pressureInHgFrom(pressure: cityWeather.main.pressure)
-        windSpeed = "\(cityWeather.wind.speed) mph"
+        windSpeed = "\(cityWeather.wind.speed) \(milesPerHourString)"
         let sunsetTime = Date(timeIntervalSince1970: Double(cityWeather.sys.sunset))
         sunset = getHourStringFrom(date: sunsetTime, timezone: timezone)
-        let visibilityMiles: CGFloat = CGFloat(cityWeather.visibility) / 1609.34
-        visibility = "\(Int(visibilityMiles.rounded())) mi"
+        let visibilityMiles: CGFloat = CGFloat(cityWeather.visibility) / mtsToMiles
+        visibility = "\(Int(visibilityMiles.rounded())) \(mileString)"
 
         if let icon = cityWeather.weather.first?.icon {
             if let imageData = UserDefaults.standard.value(forKey: icon) {
@@ -113,8 +114,8 @@ class WeatherViewModel {
     
     func getWeatherFromCacheIfAvailable() {
         do {
-            weatherResult = try UserDefaults.standard.getObject(forKey: keyLastSavedWeather, castTo: WeatherResult.self)
-            feedWeatherData()
+            let weatherResult = try UserDefaults.standard.getObject(forKey: keyLastSavedWeather, castTo: WeatherResult.self)
+            feedWeatherData(weatherResult: weatherResult)
         } catch {
             print(error.localizedDescription)
         }
