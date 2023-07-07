@@ -62,28 +62,25 @@ class WeatherViewModel {
     }
     
     /// Converts WeatherResult struct into WeatherViewModel
-    private func feedWeatherData(weatherResult: WeatherResult?) {
-        guard let cityWeather = weatherResult else {
-            return
-        }
-        city = cityWeather.name + ", " + cityWeather.sys.country
-        temperature = tempStringFor(temp: cityWeather.main.temp)
-        weatherDescription = (cityWeather.weather.first?.description.capitalized)!
-        highTemp = "H: \(tempStringFor(temp: cityWeather.main.tempMax))"
-        lowTemp = "L: \(tempStringFor(temp: cityWeather.main.tempMin))"
-        let timezone = cityWeather.timezone
-        let dt = Date(timeIntervalSince1970: Double(cityWeather.dt))
+    private func feedWeatherData(weatherResult: WeatherResult) {
+        city = weatherResult.name + ", " + weatherResult.sys.country
+        temperature = tempStringFor(temp: weatherResult.main.temp)
+        weatherDescription = (weatherResult.weather.first?.description.capitalized)!
+        highTemp = "H: \(tempStringFor(temp: weatherResult.main.tempMax))"
+        lowTemp = "L: \(tempStringFor(temp: weatherResult.main.tempMin))"
+        let timezone = weatherResult.timezone
+        let dt = Date(timeIntervalSince1970: Double(weatherResult.dt))
         date = getDateTimeFrom(date: dt, timezone: timezone)
-        humidity = "\(cityWeather.main.humidity)%"
-        feelsLike = tempStringFor(temp: cityWeather.main.feelsLike)
-        pressure = pressureInHgFrom(pressure: cityWeather.main.pressure)
-        windSpeed = "\(cityWeather.wind.speed) \(milesPerHourString)"
-        let sunsetTime = Date(timeIntervalSince1970: Double(cityWeather.sys.sunset))
+        humidity = "\(weatherResult.main.humidity)%"
+        feelsLike = tempStringFor(temp: weatherResult.main.feelsLike)
+        pressure = pressureInHgFrom(pressure: weatherResult.main.pressure)
+        windSpeed = "\(weatherResult.wind.speed) \(milesPerHourString)"
+        let sunsetTime = Date(timeIntervalSince1970: Double(weatherResult.sys.sunset))
         sunset = getHourStringFrom(date: sunsetTime, timezone: timezone)
-        let visibilityMiles: CGFloat = CGFloat(cityWeather.visibility) / mtsToMiles
+        let visibilityMiles: CGFloat = CGFloat(weatherResult.visibility) / mtsToMiles
         visibility = "\(Int(visibilityMiles.rounded())) \(mileString)"
 
-        if let icon = cityWeather.weather.first?.icon {
+        if let icon = weatherResult.weather.first?.icon {
             if let imageData = UserDefaults.standard.value(forKey: icon) {
                 let image = UIImage(data: imageData as! Data)
                 self.weatherImage = image
