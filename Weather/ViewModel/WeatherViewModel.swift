@@ -43,17 +43,14 @@ class WeatherViewModel {
     func fetchWeather(text: String?, location: CLLocation?) {
         WeatherService.shared.getWeather(city: text, location: location) { [weak self] weatherResult, error in
             DispatchQueue.main.async {
+                guard let self else { return }
                 
-                guard let self = self else {
-                    return
-                }
-                if let error = error {
+                if let error {
                     self.error = error
                     self.delegate?.weatherDidReceiveError(error: error)
                 }
-                guard let cityWeather = weatherResult else {
-                    return
-                }
+                
+                guard let cityWeather = weatherResult else { return }
                 
                 self.cacheWeather(weather: cityWeather)
                 self.feedWeatherData(weatherResult: cityWeather)
@@ -86,7 +83,7 @@ class WeatherViewModel {
                 self.weatherImage = image
             } else {
                 WeatherService.shared.getWeatherIcon(icon: icon) { image, errorMessage in
-                    if let image = image {
+                    if let image {
                         let imageData = image.pngData()
                         UserDefaults.standard.setValue(imageData, forKey: icon)
                         self.weatherImage = image
@@ -134,7 +131,7 @@ class WeatherViewModel {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .none
         dateFormatter.timeStyle = .short
-        if let timezone = timezone {
+        if let timezone {
             dateFormatter.timeZone = TimeZone(abbreviation: calculateGMT(time: timezone))
         }
         var string = dateFormatter.string(from: date)
@@ -148,7 +145,7 @@ class WeatherViewModel {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
         dateFormatter.dateStyle = .medium
-        if let timezone = timezone {
+        if let timezone {
             dateFormatter.timeZone = TimeZone(abbreviation: calculateGMT(time: timezone))
         }
         let string = dateFormatter.string(from: date)

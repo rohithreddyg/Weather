@@ -22,10 +22,10 @@ class WeatherService {
     
     private func buildWeatherUrlString(city: String?, location: CLLocation?) -> String {
         var URL_PARAMS = ""
-        if let location = location {
+        if let location {
             URL_PARAMS = "lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)"
-        } else {
-            URL_PARAMS = "q=" + city!
+        } else if let city {
+            URL_PARAMS = "q=" + city
         }
         return baseUrl + URL_PARAMS + "&appid=" + apiKey + "&units=imperial"
     }
@@ -39,23 +39,22 @@ class WeatherService {
         }
         
         let task = session.dataTask(with: url) { data, response, error in
-                if let _ = error {
-                    completion(nil, WeatherError.networkFailed)
-                    return
-                }
-                
-                guard let data = data,
-                      let _ = response as? HTTPURLResponse else {
-                    completion(nil, WeatherError.jsonSerializationFailed)
-                    return
-                }
-                
+            if let _ = error {
+                completion(nil, WeatherError.networkFailed)
+                return
+            }
+            
+            guard let data else {
+                completion(nil, WeatherError.jsonSerializationFailed)
+                return
+            }
+            
             do {
                 let items = try JSONDecoder().decode(WeatherResult.self, from: data)
                 completion(items, nil)
             } catch {
-                    completion(nil, WeatherError.jsonParsingFailed)
-                }
+                completion(nil, WeatherError.jsonParsingFailed)
+            }
         }
         task.resume()
     }
@@ -75,8 +74,7 @@ class WeatherService {
                     return
                 }
                 
-                guard let imageData = data,
-                      let _ = response as? HTTPURLResponse else {
+                guard let imageData = data else {
                     completion(nil, WeatherError.jsonSerializationFailed)
                     return
                 }

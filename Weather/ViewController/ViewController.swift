@@ -59,7 +59,7 @@ class ViewController: UIViewController {
     private func configureView() {
         toggleVisibility(of: temperatureStackView, for: weatherViewModel?.city ?? "")
         
-        guard let weatherViewModel = weatherViewModel else {
+        guard let weatherViewModel else {
             showAlert(message: "")
             return
         }
@@ -114,7 +114,7 @@ class ViewController: UIViewController {
     }
     
     private func toggleVisibility(of view: UIView, for value: String) {
-        view.isHidden = !value.isEmpty ? false : true
+        view.isHidden = value.isEmpty
     }
     
     private func showAlert(message: String) {
